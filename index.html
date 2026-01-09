@@ -155,6 +155,18 @@
 @media (max-width:740px){
   .cardTitle{ font-size:15px; }
 }
+	  
+/* Táblázat: első oszlop balra, a dátumos oszlopok középre */
+#tbl th:not(:first-child),
+#tbl td:not(:first-child){
+  text-align:center;
+}
+
+#tbl th:first-child,
+#tbl td:first-child{
+  text-align:left;
+}
+
 
   </style>
 </head>
