@@ -24,7 +24,7 @@
     table{width:100%;border-collapse:collapse; font-size:14px;}
     th,td{padding:10px 8px;border-bottom:1px solid var(--line); text-align:left;}
     th{color:var(--muted); font-weight:650;}
-    .note{color:var(--muted);font-size:13px;line-height:1.45;margin-top:10px;}
+    .note{color:var(--muted);font-size:13px;line-height:1.45;}
     .span-4{grid-column:span 4;}
     .span-6{grid-column:span 6;}
     .span-8{grid-column:span 8;}
@@ -92,44 +92,10 @@
   border-radius:14px;
   font-size:14px;
 }
-.coachText{
-  margin-top:8px;
-  font-size:14px;
-  line-height:1.55;
-  color:var(--text);
-  max-width:70ch;          /* ne legyen túl széles */
-}
+
 /* Lezáró edzői visszajelzés kártya */
 .coachCard{
   border-top:1px solid rgba(255,255,255,0.06);
-}
-
-.coachTitle{
-  font-size:14px;
-  font-weight:750;
-  letter-spacing:0.3px;
-  color:var(--text);
-  margin-bottom:6px;
-}
-
-.coachText{
-  font-size:14px;
-  line-height:1.6;
-  color:var(--text);
-  opacity:0.95;
-  max-width:72ch;
-}
-.coachText p{
-  margin: 0 0 10px;
-}
-
-.coachText p:last-child{
-  margin-bottom: 0;
-}
-
-.coachText strong{
-  color: var(--text);
-  font-weight: 800;
 }
 
 .header{
@@ -155,11 +121,6 @@
     width:56px;
     height:56px;
   }
-}
-.cardTitle{
-  font-weight:700;
-  font-size:16px;
-  margin-bottom:1px;   /* ← KISEBB TÁV */
 }
 
 .cardTitle + .note{
@@ -278,12 +239,8 @@
           <table id="tbl"></table>
         </div>
       </div>
-    </div>
   
 <div class="card span-12 coachCard">
-  <div style="font-weight:700;margin-bottom:4px;">Visszajelzés</div>
-
- <div class="card span-12">
   <div class="cardTitle">Visszajelzés</div>
   <div class="coachText">
     Az izom sűrűbb, mint a zsír, ezért a testsúly önmagában nem mindig mutatja meg a valódi változást.
@@ -293,10 +250,8 @@
 </div>
 
 </div>
+</div>
 
-
-
-	
 
 <script>
   const dates = ["2025-11-20", "2025-12-04", "2026-01-08"];
