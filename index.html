@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Haladási riport</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root { --bg:#0b0f14; --card:#121823; --muted:#a9b4c0; --text:#eaf0f6; --line:#243041; --good:#22c55e; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:linear-gradient(180deg,#0b0f14,#070a0e); color:var(--text);}
+    .wrap{max-width:980px;margin:0 auto;padding:24px 16px 64px;}
+    h1{margin:0 0 8px;font-size:28px;letter-spacing:.2px;}
+    .sub{color:var(--muted);margin:0 0 18px;}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(12,1fr);}
+    .card{background:rgba(18,24,35,.92); border:1px solid var(--line); border-radius:18px; padding:14px 14px 12px; box-shadow:0 10px 30px rgba(0,0,0,.25);}
+    .kpi{display:flex;flex-direction:column;gap:6px;}
+    .kpi .label{color:var(--muted);font-size:12px;}
+    .kpi .value{font-size:22px;font-weight:750;}
+    .kpi .hint{color:var(--muted);font-size:12px;line-height:1.35;}
+    .good{color:var(--good);}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+    select{background:#0c1118;color:var(--text); border:1px solid var(--line); border-radius:12px; padding:10px 12px; font-size:14px;}
+    table{width:100%;border-collapse:collapse; font-size:14px;}
+    th,td{padding:10px 8px;border-bottom:1px solid var(--line); text-align:left;}
+    th{color:var(--muted); font-weight:650;}
+    .note{color:var(--muted);font-size:13px;line-height:1.45;margin-top:10px;}
+    .span-4{grid-column:span 4;}
+    .span-6{grid-column:span 6;}
+    .span-8{grid-column:span 8;}
+    .span-12{grid-column:span 12;}
+    @media (max-width:740px){ .span-4,.span-6,.span-8{grid-column:span 12;} h1{font-size:24px;} }
+	.kpiRows{margin-top:10px; display:flex; flex-direction:column; gap:8px;}
+.kpiRow{display:flex; align-items:center; justify-content:space-between; gap:10px;
+        padding:8px 10px; border:1px solid var(--line); border-radius:12px;
+        background:rgba(12,17,24,.55);}
+.kpiName{color:var(--muted); font-size:13px; font-weight:650;}
+.kpiVal{font-size:16px; font-weight:800;}
+/* 6 hét eredményei – finomabb, egységes betűméret */
+.kpiRows{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.kpiRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(12,17,24,.55);
+
+  font-size:14px;      /* ← EZ A LÉNYEG */
+  font-weight:600;     /* nem ordít */
+}
+
+.kpiRow span:first-child{
+  color:var(--text);
+}
+
+.kpiRow span:last-child{
+  color:var(--good);
+  font-weight:700;     /* szám marad hangsúlyos */
+}
+
+/* A középső tartalom kapjon fix ritmust */
+.card.kpi .value{
+  margin:14px 0;
+}
+/* Egységes ritmus a kártyákban (szétfeszítés nélkül) */
+.card.kpi{
+  display:flex;
+  flex-direction:column;
+  gap:10px;               /* egységes térköz */
+}
+
+.card.kpi .value{
+  margin:0;               /* ne legyen extra üres tér */
+}
+
+.card.kpi .hint{
+  margin-top:2px;
+  max-width:34ch;         /* ne legyen túl hosszú sor */
+}
+/* 6 hét eredményei lista – kompaktabb */
+.kpiRows{ gap:8px; margin-top:4px; }
+
+.kpiRow{
+  padding:9px 12px;
+  border-radius:14px;
+  font-size:14px;
+}
+.coachText{
+  margin-top:8px;
+  font-size:14px;
+  line-height:1.55;
+  color:var(--text);
+  max-width:70ch;          /* ne legyen túl széles */
+}
+/* Lezáró edzői visszajelzés kártya */
+.coachCard{
+  border-top:1px solid rgba(255,255,255,0.06);
+}
+
+.coachTitle{
+  font-size:14px;
+  font-weight:750;
+  letter-spacing:0.3px;
+  color:var(--text);
+  margin-bottom:6px;
+}
+
+.coachText{
+  font-size:14px;
+  line-height:1.6;
+  color:var(--text);
+  opacity:0.95;
+  max-width:72ch;
+}
+.coachText p{
+  margin: 0 0 10px;
+}
+
+.coachText p:last-child{
+  margin-bottom: 0;
+}
+
+.coachText strong{
+  color: var(--text);
+  font-weight: 800;
+}
+
+.header{
+  display:flex;
+  align-items:center;     /* ← ettől lesz egy vonalban */
+  gap:14px;
+  margin-bottom:18px;
+}
+
+/* Kör alakú, nagyobb logó */
+.logo{
+  width:72px;             /* ← nagyobb méret */
+  height:72px;
+  object-fit:cover;       /* ne torzuljon */
+  border-radius:50%;      /* ← KÖR ALAK */
+  background:var(--card);
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+}
+
+/* Mobil finomítás */
+@media (max-width:740px){
+  .logo{
+    width:56px;
+    height:56px;
+  }
+}
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+   <div class="header">
+  <img src="profilkep.jpg" alt="Logó" class="logo">
+  <div>
+    <h1>Haladási riport</h1>
+    <p class="sub">2025-11-20 → 2026-01-08 • 6 hét</p>
+  </div>
+</div>
+
+    <div class="grid">
+      <div class="card kpi span-4">
+        <div class="label">Testsúly változás</div>
+        <div class="value good">-2,4 kg</div>
+        <div class="hint">A mérleg nem csökkenhet a végtelenségig: ahogy a zsírvesztést izomépítés kíséri, a súly változása lassulhat, miközben a forma tovább javul.</div>
+      </div>
+
+      <div class="card kpi span-4">
+        <div class="label">Összes leadott cm (Comb+Derék+Csípő+Mell)</div>
+        <div class="value good">-14 cm</div>
+        <div class="hint">Ez a legjobb „tükör-mutató”: nem csak a mérleg számít.</div>
+      </div>
+	  <div class="card kpi span-4">
+  <div class="label">6 hét eredményei</div>
+
+  <div class="value">
+    <div class="kpiRows">
+      <div class="kpiRow"><span>Comb</span><span class="good">–3 cm</span></div>
+      <div class="kpiRow"><span>Derék</span><span class="good">–2 cm</span></div>
+      <div class="kpiRow"><span>Csípő</span><span class="good">–5 cm</span></div>
+      <div class="kpiRow"><span>Mell</span><span class="good">–4 cm</span></div>
+    </div>
+  </div>
+
+  <div class="hint">
+    A körfogatok változása a legjobb visszajelzés a formálódásról.
+  </div>
+</div>
+
+
+      <div class="card span-8">
+        <div class="row">
+          <div>
+            <div style="font-weight:700;margin-bottom:4px;">Grafikon</div>
+            <div class="note">Válassz egy mért értéket, és az oldal automatikusan kirajzolja az alakulását.</div>
+          </div>
+          <div>
+            <label for="metric" class="note" style="margin-right:8px;">Mutató</label>
+            <select id="metric"></select>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <canvas id="chart" height="120"></canvas>
+        </div>
+      </div>
+
+		 <div class="card kpi span-4">
+	  <div class="label">Átlagos heti változás a teljes mérési időszak alapján.</div>
+
+	  <div class="value">
+		<div class="kpiRows">
+		  <div class="kpiRow"><span>Testsúly</span><span class="good">–0,34 kg / hét</span></div>
+		  <div class="kpiRow"><span>Comb</span><span class="good">–0,4 cm / hét</span></div>
+		  <div class="kpiRow"><span>Derék</span><span class="good">–0,3 cm / hét</span></div>
+		  <div class="kpiRow"><span>Csípő</span><span class="good">–0,7 cm / hét</span></div>
+		  <div class="kpiRow"><span>Mell</span><span class="good">–0,6 cm / hét</span></div>
+		</div>
+	  </div>
+	</div>
+
+
+
+
+      <div class="card span-12">
+        <div style="font-weight:700;margin-bottom:8px;">Mérések táblázata</div>
+        <div style="overflow:auto;">
+          <table id="tbl"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="card span-12 coachCard">
+  <div style="font-weight:700;margin-bottom:4px;">Visszajelzés</div>
+
+  <div class="coachText">
+    Az izom sűrűbb, mint a zsír, ezért a testsúly önmagában nem mindig mutatja meg a valódi változást.
+    A test ott változik először látványosan, ahol korábban a legtöbbet raktározott.
+    Az adatok azt mutatják, hogy jó irányban haladsz – a következetes munka mindig meghozza a látványos eredményt.
+  </div>
+</div>
+
+
+
+
+	
+
+<script>
+  const dates = ["2025-11-20", "2025-12-04", "2026-01-08"];
+  const series = {"Súly": [65.4, 63.5, 63.0], "Comb": [61.0, 59.0, 58.0], "Derék": [73.0, 71.0, 71.0], "Csípő": [92.0, 89.0, 87.0], "Mell": [92.0, 91.0, 88.0]};
+
+  const sel = document.getElementById('metric');
+  Object.keys(series).forEach((k) => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = k;
+    sel.appendChild(opt);
+  });
+  sel.value = 'Súly';
+
+  // Table
+  const tbl = document.getElementById('tbl');
+  const keys = Object.keys(series);
+  let html = '<thead><tr><th>Mutató</th>' + dates.map(d => `<th>${d}</th>`).join('') + '</tr></thead><tbody>';
+  keys.forEach(k => {
+    html += `<tr><td><strong>${k}</strong></td>` + series[k].map(v => `<td>${v}</td>`).join('') + '</tr>';
+  });
+  html += '</tbody>';
+  tbl.innerHTML = html;
+
+  // Chart
+  const ctx = document.getElementById('chart').getContext('2d');
+  let chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: dates,
+      datasets: [{
+        label: sel.value,
+        data: series[sel.value],
+        tension: 0.25,
+        borderWidth: 2,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: true } },
+      scales: { y: { beginAtZero: false } }
+    }
+  });
+
+  function fmt(n) {
+    const s = (Math.round(n * 10) / 10).toString();
+    return s.replace('.', ',');
+  }
+
+	sel.addEventListener('change', () => {
+	  chart.data.datasets[0].data = series[sel.value];
+	  chart.data.datasets[0].label = sel.value;  // ← EZ FRISSÍTI A LEGEND SZÖVEGET
+	  chart.update();
+	});
+
+
+</script>
+</body>
+</html>
