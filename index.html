@@ -156,9 +156,15 @@
     height:56px;
   }
 }
+.cardTitle{
+  font-weight:700;
+  font-size:16px;
+  margin-bottom:1px;   /* ← KISEBB TÁV */
+}
 
-
-
+.cardTitle + .note{
+  margin-top:0;        /* ← SZÜNTETI A RÉST */
+}
 
   </style>
 </head>
@@ -174,19 +180,21 @@
 
     <div class="grid">
       <div class="card kpi span-4">
-        <div class="label">Testsúly változás</div>
+        <div class="cardTitle">Testsúly változás</div>
         <div class="value good">-2,4 kg</div>
         <div class="hint">A mérleg nem csökkenhet a végtelenségig: ahogy a zsírvesztést izomépítés kíséri, a súly változása lassulhat, miközben a forma tovább javul.</div>
       </div>
 
       <div class="card kpi span-4">
-        <div class="label">Összes leadott cm (Comb+Derék+Csípő+Mell)</div>
-        <div class="value good">-14 cm</div>
+        <div class="cardTitle">Összes leadott cm</div>
+        <div class="note">(Comb+Derék+Csípő+Mell)</div>
+		<div class="value good">-14 cm</div>
         <div class="hint">Ez a legjobb „tükör-mutató”: nem csak a mérleg számít.</div>
       </div>
+	  
+	  
 	  <div class="card kpi span-4">
-  <div class="label">6 hét eredményei</div>
-
+  <div class="cardTitle">6 hét eredményei</div>
   <div class="value">
     <div class="kpiRows">
       <div class="kpiRow"><span>Comb</span><span class="good">–3 cm</span></div>
@@ -205,7 +213,7 @@
       <div class="card span-8">
         <div class="row">
           <div>
-            <div style="font-weight:700;margin-bottom:4px;">Grafikon</div>
+            <div class="cardTitle">Grafikon</div>
             <div class="note">Válassz egy mért értéket, és az oldal automatikusan kirajzolja az alakulását.</div>
           </div>
           <div>
@@ -219,8 +227,8 @@
       </div>
 
 		 <div class="card kpi span-4">
-	  <div class="label">Átlagos heti változás a teljes mérési időszak alapján.</div>
-
+	  <div class="cardTitle">Átlagos heti változás</div>
+		<div class="note">A teljes mérési időszak alapján.</div>
 	  <div class="value">
 		<div class="kpiRows">
 		  <div class="kpiRow"><span>Testsúly</span><span class="good">–0,34 kg / hét</span></div>
@@ -236,7 +244,7 @@
 
 
       <div class="card span-12">
-        <div style="font-weight:700;margin-bottom:8px;">Mérések táblázata</div>
+        <div class="cardTitle">Mérések táblázata</div>
         <div style="overflow:auto;">
           <table id="tbl"></table>
         </div>
