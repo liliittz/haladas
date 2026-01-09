@@ -177,7 +177,23 @@
     max-width: none;
   }
 }
+.cardTitle{
+  font-weight:700;
+  font-size:16px;
+  margin-bottom:4px;
+}
 
+.coachText{
+  margin-top:6px;
+  font-size:14px;
+  line-height:1.6;
+  color:var(--text);
+  opacity:0.95;
+  max-width:none;   /* mobilon töltse ki */
+}
+@media (max-width:740px){
+  .cardTitle{ font-size:15px; }
+}
 
   </style>
 </head>
@@ -267,12 +283,15 @@
 <div class="card span-12 coachCard">
   <div style="font-weight:700;margin-bottom:4px;">Visszajelzés</div>
 
+ <div class="card span-12">
+  <div class="cardTitle">Visszajelzés</div>
   <div class="coachText">
     Az izom sűrűbb, mint a zsír, ezért a testsúly önmagában nem mindig mutatja meg a valódi változást.
     A test ott változik először látványosan, ahol korábban a legtöbbet raktározott.
     Az adatok azt mutatják, hogy jó irányba haladsz – a következetes munka mindig meghozza a látványos eredményt.
   </div>
 </div>
+
 </div>
 
 
